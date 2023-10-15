@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"></script>
+
+    <script src="script.js"></script>
+
+    <style>
+      body {
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none; /* IE 10 and IE 11 */
+        user-select: none; /* Standard syntax */
+      }
+
+      .letter {
+        display: inline-block;
+        width:  32px;
+        height: 32px;
+        margin-bottom: 4px;
+        margin-right: 4px;
+        background-color: #d0d0d0;
+        text-align: center;
+        line-height: 32px;
+        cursor: default;
+
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none; /* IE 10 and IE 11 */
+        user-select: none; /* Standard syntax */
+      }
+
+      .word {
+        display: inline-block;
+        height: 32px;
+        line-height: 32px;
+        cursor: default;
+        background-color: #d0d0d0;
+        padding-left: 4px;
+        padding-right: 4px;
+        text-align: center;
+        margin-bottom: 4px;
+        margin-right: 4px;
+        
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none; /* IE 10 and IE 11 */
+        user-select: none; /* Standard syntax */
+      }
+
+      .found {
+        background-color: #a0eca0;
+      }
+
+      .dragged {
+        background-color: #fffd91;
+      }
+    </style>
+  </head>
+
+  <body onload="setup()">
+    <div id="word-list-1">
+      <span class="word" id="template-word">WORD</span>
+    </div>
+
+    <div id="grid-wrapper">
+      <span class="letter" id="template-letter"></span>
+    </div>
+  </body>
+</html>
