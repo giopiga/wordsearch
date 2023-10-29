@@ -55,109 +55,8 @@ let setup = function() {
 
       letter_span.id = 'letter-' + i + '-' + j;
       letter_span.textContent = grid.charAt(idx);
-
-      letter_span.onmousedown = function() {
-        dragging = true;
-        dragging_start = [i, j];
-      };
-
-      letter_span.onmouseenter = function() {
-        if (dragging) {
-          dragging_end = [i, j];
-
-          const diff = [
-            dragging_end[0] - dragging_start[0],
-            dragging_end[1] - dragging_start[1]
-          ];
-
-          const theta = Math.atan2(diff[1], diff[0]);
-          const pi = Math.PI;
-
-          if (-pi / 8 < theta && theta <= pi / 8) {
-            dragging_direction = [1, 0];
-            dragging_length = dragging_end[0] - dragging_start[0];
-          } else if (pi / 8 < theta && theta <= 3 * pi / 8) {
-            dragging_direction = [1, 1];
-            dragging_length = dragging_end[0] - dragging_start[0];
-          } else if (3 * pi / 8 < theta && theta <= 5 * pi / 8) {
-            dragging_direction = [0, 1];
-            dragging_length = dragging_end[1] - dragging_start[1];
-          } else if (5 * pi / 8 < theta && theta <= 7 * pi / 8) {
-            dragging_direction = [-1, 1];
-            dragging_length = dragging_end[1] - dragging_start[1];
-          } else if (7 * pi / 8 < theta || theta < -7 * pi / 8) {
-            dragging_direction = [-1, 0];
-            dragging_length = dragging_start[0] - dragging_end[0];
-          } else if (-7 * pi / 8 <= theta && theta < -5 * pi / 8) {
-            dragging_direction = [-1, -1];
-            dragging_length = dragging_start[0] - dragging_end[0];
-          } else if (-5 * pi / 8 <= theta && theta < -3 * pi / 8) {
-            dragging_direction = [0, -1];
-            dragging_length = dragging_start[1] - dragging_end[1];
-          } else if (-3 * pi / 8 <= theta && theta < -1 * pi / 8) {
-            dragging_direction = [1, -1];
-            dragging_length = dragging_start[1] - dragging_end[1];
-          }
-
-          dragging_length += 1;
-
-          $('.dragged').removeClass('dragged');
-
-          let cur = dragging_start.slice(0);
-          for (let i = 0; i < dragging_length; ++i) {
-            $('#letter-' + cur[0] + '-' + cur[1]).addClass('dragged');
-
-            cur[0] += dragging_direction[0];
-            cur[1] += dragging_direction[1];
-          }
-        }
-      };
-
-      letter_span.onmouseup = function() {
-        if (!dragging) return;
-
-        dragging = false;
-
-        // Retrieve the dragged word.
-        let word = '';
-        {
-          let cur = dragging_start.slice(0);
-          for (let i = 0; i < dragging_length; ++i) {
-            const idx = cur[1] + grid_width * cur[0];
-            word += grid[idx];
-
-            cur[0] += dragging_direction[0];
-            cur[1] += dragging_direction[1];
-          }
-        }
-
-        // Check if it belongs to the list of words.
-        let found_word_idx = undefined;
-
-        for (let i = 0; i < words_1.length; ++i) {
-          if (word == words_1[i]) {
-            found_words[i] = true;
-            found_word_idx = i;
-            break;
-          }
-        }
-
-        $('.dragged').removeClass('dragged');
-
-        // If the word is correct, we update the corresponding word list element
-        // as well as the letters in the grid.
-        if (found_word_idx != undefined) {
-          $('#word-' + found_word_idx).addClass('found');
-
-          let cur = dragging_start.slice(0);
-          for (let i = 0; i < dragging_length; ++i) {
-            $('#letter-' + cur[0] + '-' + cur[1]).addClass('found');
-
-            cur[0] += dragging_direction[0];
-            cur[1] += dragging_direction[1];
-          }
-        }
-      };
+      letter_span.row = i;
+      letter_span.col = j;
 
       grid_wrapper.appendChild(letter_span);
     }
@@ -165,6 +64,121 @@ let setup = function() {
     const br = document.createElement('br');
     grid_wrapper.appendChild(br);
   }
+
+  let handler_down = function(e) {
+    let el = document.elementFromPoint(e.pageX, e.pageY);
+    if (!el || el.id.substring(0, 6) != 'letter') return;
+
+    dragging = true;
+    dragging_start = [el.row, el.col];
+  };
+
+  let handler_move = function(e) {
+    if (!dragging) return;
+
+    let el = document.elementFromPoint(e.pageX, e.pageY);
+    if (!el || el.id.substring(0, 6) != 'letter') return;
+
+    dragging_end = [el.row, el.col];
+
+    const diff = [
+      dragging_end[0] - dragging_start[0], dragging_end[1] - dragging_start[1]
+    ];
+
+    const theta = Math.atan2(diff[1], diff[0]);
+    const pi = Math.PI;
+
+    if (-pi / 8 < theta && theta <= pi / 8) {
+      dragging_direction = [1, 0];
+      dragging_length = dragging_end[0] - dragging_start[0];
+    } else if (pi / 8 < theta && theta <= 3 * pi / 8) {
+      dragging_direction = [1, 1];
+      dragging_length = dragging_end[0] - dragging_start[0];
+    } else if (3 * pi / 8 < theta && theta <= 5 * pi / 8) {
+      dragging_direction = [0, 1];
+      dragging_length = dragging_end[1] - dragging_start[1];
+    } else if (5 * pi / 8 < theta && theta <= 7 * pi / 8) {
+      dragging_direction = [-1, 1];
+      dragging_length = dragging_end[1] - dragging_start[1];
+    } else if (7 * pi / 8 < theta || theta < -7 * pi / 8) {
+      dragging_direction = [-1, 0];
+      dragging_length = dragging_start[0] - dragging_end[0];
+    } else if (-7 * pi / 8 <= theta && theta < -5 * pi / 8) {
+      dragging_direction = [-1, -1];
+      dragging_length = dragging_start[0] - dragging_end[0];
+    } else if (-5 * pi / 8 <= theta && theta < -3 * pi / 8) {
+      dragging_direction = [0, -1];
+      dragging_length = dragging_start[1] - dragging_end[1];
+    } else if (-3 * pi / 8 <= theta && theta < -1 * pi / 8) {
+      dragging_direction = [1, -1];
+      dragging_length = dragging_start[1] - dragging_end[1];
+    }
+
+    dragging_length += 1;
+
+    $('.dragged').removeClass('dragged');
+
+    let cur = dragging_start.slice(0);
+    for (let i = 0; i < dragging_length; ++i) {
+      $('#letter-' + cur[0] + '-' + cur[1]).addClass('dragged');
+
+      cur[0] += dragging_direction[0];
+      cur[1] += dragging_direction[1];
+    }
+  };
+
+  let handler_up = function(e) {
+    if (!dragging) return;
+
+    let el = document.elementFromPoint(e.pageX, e.pageY);
+    if (!el || el.id.substring(0, 6) != 'letter') return;
+
+    dragging = false;
+
+    // Retrieve the dragged word.
+    let word = '';
+    {
+      let cur = dragging_start.slice(0);
+      for (let i = 0; i < dragging_length; ++i) {
+        const idx = cur[1] + grid_width * cur[0];
+        word += grid[idx];
+
+        cur[0] += dragging_direction[0];
+        cur[1] += dragging_direction[1];
+      }
+    }
+
+    // Check if it belongs to the list of words.
+    let found_word_idx = undefined;
+
+    for (let i = 0; i < words_1.length; ++i) {
+      if (word == words_1[i]) {
+        found_words[i] = true;
+        found_word_idx = i;
+        break;
+      }
+    }
+
+    $('.dragged').removeClass('dragged');
+
+    // If the word is correct, we update the corresponding word list
+    // element as well as the letters in the grid.
+    if (found_word_idx != undefined) {
+      $('#word-' + found_word_idx).addClass('found');
+
+      let cur = dragging_start.slice(0);
+      for (let i = 0; i < dragging_length; ++i) {
+        $('#letter-' + cur[0] + '-' + cur[1]).addClass('found');
+
+        cur[0] += dragging_direction[0];
+        cur[1] += dragging_direction[1];
+      }
+    }
+  };
+
+  grid_wrapper.addEventListener('pointerdown', handler_down);
+  grid_wrapper.addEventListener('pointermove', handler_move);
+  grid_wrapper.addEventListener('pointerup', handler_up);
 
   // Generate the list of words.
   template_word.remove();
