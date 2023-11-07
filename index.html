@@ -2,6 +2,8 @@
 
 <html>
   <head>
+    <meta name="viewport" content="width=512, initial-scale=1">
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
       crossorigin="anonymous"></script>
@@ -9,45 +11,65 @@
     <script src="script.js"></script>
 
     <style>
+      @-ms-viewport{
+        width: device-width;
+      }
+
       body {
         -webkit-user-select: none; /* Safari */
         -ms-user-select: none; /* IE 10 and IE 11 */
         user-select: none; /* Standard syntax */
+
+        font-family: sans-serif;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      #wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: auto;
+        width: 512px;
+        height: 768px;
+      }
+
+      #grid-wrapper {
+        position: relative;
+      }
+
+      #word-list {
+        margin-top: 32px;
       }
 
       .letter {
         display: inline-block;
         width:  32px;
         height: 32px;
-        margin-bottom: 4px;
-        margin-right: 4px;
-        background-color: #d0d0d0;
+        margin: 0px;
+        background-color: white /* #d0d0d0 */;
         text-align: center;
         line-height: 32px;
         cursor: default;
 
-        -webkit-user-select: none; /* Safari */
-        -ms-user-select: none; /* IE 10 and IE 11 */
-        user-select: none; /* Standard syntax */
-
         touch-action: none;
+        font-size: 24px;
       }
 
       .word {
         display: inline-block;
+        width: 128px;
         height: 32px;
         line-height: 32px;
         cursor: default;
-        background-color: #d0d0d0;
-        padding-left: 4px;
-        padding-right: 4px;
+        background-color: white;
         text-align: center;
-        margin-bottom: 4px;
-        margin-right: 4px;
-        
-        -webkit-user-select: none; /* Safari */
-        -ms-user-select: none; /* IE 10 and IE 11 */
-        user-select: none; /* Standard syntax */
+
+        font-size: 14px;
       }
 
       .found {
@@ -60,13 +82,15 @@
     </style>
   </head>
 
-  <body onload="setup()">
-    <div id="word-list-1">
-      <span class="word" id="template-word">WORD</span>
-    </div>
+  <body onload="setup()" id="body">
+    <div id="wrapper">
+      <div id="grid-wrapper">
+        <span class="letter" id="template-letter"></span>
+      </div>
 
-    <div id="grid-wrapper">
-      <span class="letter" id="template-letter"></span>
+      <div id="word-list">
+        <span class="word" id="template-word">WORD</span>
+      </div>
     </div>
   </body>
 </html>

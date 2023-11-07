@@ -40,7 +40,7 @@ let setup = function() {
 
   // Initialize the UI.
   let grid_wrapper = document.getElementById('grid-wrapper');
-  let word_list_1 = document.getElementById('word-list-1');
+  let word_list_1 = document.getElementById('word-list');
 
   let template_letter = document.getElementById('template-letter');
   let template_word = document.getElementById('template-word');
@@ -130,9 +130,7 @@ let setup = function() {
   let handler_up = function(e) {
     if (!dragging) return;
 
-    let el = document.elementFromPoint(e.pageX, e.pageY);
-    if (!el || el.id.substring(0, 6) != 'letter') return;
-
+    $('.dragged').removeClass('dragged');
     dragging = false;
 
     // Retrieve the dragged word.
@@ -159,8 +157,6 @@ let setup = function() {
       }
     }
 
-    $('.dragged').removeClass('dragged');
-
     // If the word is correct, we update the corresponding word list
     // element as well as the letters in the grid.
     if (found_word_idx != undefined) {
@@ -176,9 +172,9 @@ let setup = function() {
     }
   };
 
-  grid_wrapper.addEventListener('pointerdown', handler_down);
-  grid_wrapper.addEventListener('pointermove', handler_move);
-  grid_wrapper.addEventListener('pointerup', handler_up);
+  window.addEventListener('pointerdown', handler_down);
+  window.addEventListener('pointermove', handler_move);
+  window.addEventListener('pointerup', handler_up);
 
   // Generate the list of words.
   template_word.remove();
