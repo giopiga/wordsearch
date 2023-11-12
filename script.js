@@ -41,13 +41,26 @@ let dragging_end = [-1, -1];
 let dragging_direction = [0, 0];
 let dragging_length = 0;
 
+let found_grid_letters = Array(grid_height);
+for (let i = 0; i < found_grid_letters.length; ++i) {
+  found_grid_letters[i] = Array(grid_width);
+  found_grid_letters[i].fill(false);
+}
+
 let found_words = Array(words_1.length);
+found_words.fill(false);
+
 let n_found = 0;
 
 // Initialization. /////////////////////////////////////////////////////////////
 
 let setup = function() {
-  found_words.fill(false);
+  // Retrieve data from local storage, if any.
+  if (localStorage.found_grid_letters) {
+    found_grid_letters = JSON.parse(localStorage.found_grid_letters);
+    found_words = JSON.parse(localStorage.found_words);
+    n_found = parseInt(localStorage.n_found);
+  }
 
   // Initialize the UI.
   let grid_wrapper = document.getElementById('grid-wrapper');
@@ -75,6 +88,8 @@ let setup = function() {
         last_letter_symbol.className = 'fa-solid fa-infinity';
         letter_span.appendChild(last_letter_symbol);
       }
+
+      if (found_grid_letters[i][j]) letter_span.className += ' found';
 
       grid_wrapper.appendChild(letter_span);
     }
@@ -186,9 +201,16 @@ let setup = function() {
       for (let i = 0; i < dragging_length; ++i) {
         $('#letter-' + cur[0] + '-' + cur[1]).addClass('found');
 
+        found_grid_letters[cur[0]][cur[1]] = true;
+
         cur[0] += dragging_direction[0];
         cur[1] += dragging_direction[1];
       }
+
+      // We also update the local storage.
+      localStorage.found_words = JSON.stringify(found_words);
+      localStorage.n_found = n_found;
+      localStorage.found_grid_letters = JSON.stringify(found_grid_letters);
     }
 
     if (n_found == words_1.length) {
@@ -209,6 +231,8 @@ let setup = function() {
 
     word_span.id = 'word-' + i;
     word_span.textContent = word;
+
+    if (found_words[i]) word_span.className += ' found';
 
     word_list_1.appendChild(word_span);
   }
