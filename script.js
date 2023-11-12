@@ -42,6 +42,7 @@ let dragging_direction = [0, 0];
 let dragging_length = 0;
 
 let found_words = Array(words_1.length);
+let n_found = 0;
 
 // Initialization. /////////////////////////////////////////////////////////////
 
@@ -170,6 +171,8 @@ let setup = function() {
       if (word == words_1[i]) {
         found_words[i] = true;
         found_word_idx = i;
+        ++n_found;
+
         break;
       }
     }
@@ -186,6 +189,10 @@ let setup = function() {
         cur[0] += dragging_direction[0];
         cur[1] += dragging_direction[1];
       }
+    }
+
+    if (n_found == words_1.length) {
+      $('.found').addClass('faded');
     }
   };
 
