@@ -3,22 +3,21 @@
 const grid_width = 16;
 const grid_height = 15;
 
-const grid =
-    'MMILANOBSILveZnt' +
+const grid = 'MMILANOBSILveZnt' +
     'AABIHSUILLENIRAM' +
     'RETTOPYRRAHTEiAd' +
-    'IuNIPOTIIeADETRR' + 
+    'IuNIPOTIIeADETRR' +
     'ONBgiLNugMONEEEB' +
     'KHAISISSAOIMZLnA' +
-    'ACNTBTodGDALOuMB' + 
+    'ACNTBTodGDALOuMB' +
     'RAGMAEeBUTASOmEY' +
     'TEAilCYaIVOvePNS' +
-    'IBAMENICARESSETI' + 
-    'HAntNIABARBEROAT' + 
-    'CViHqCuVaBOUQUET' + 
+    'IBAMENICARESSETI' +
+    'HAntNIABARBEROAT' +
+    'CViHqCuVaBOUQUET' +
     'OOOttOLSIRVAIHCE' +
     'IJAIDATASCIENCER' +
-    'GSFPrAPPAEKLIRo☺';
+    'GSFPrAPPAEKLIRo';
 
 const words_1 = [
   'AIDA',        'ALVAROSOLER', 'APPA',      'ASSISI',      'BABYSITTER',
@@ -65,9 +64,16 @@ let setup = function() {
       let letter_span = template_letter.cloneNode();
 
       letter_span.id = 'letter-' + i + '-' + j;
-      letter_span.textContent = grid.charAt(idx);
       letter_span.row = i;
       letter_span.col = j;
+
+      if (idx < grid.length) {
+        letter_span.textContent = grid.charAt(idx);
+      } else {
+        let last_letter_symbol = document.createElement('i');
+        last_letter_symbol.className = 'fa-solid fa-infinity';
+        letter_span.appendChild(last_letter_symbol);
+      }
 
       grid_wrapper.appendChild(letter_span);
     }

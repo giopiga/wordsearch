@@ -3,7 +3,15 @@
 <html>
   <body style="background-color:#f7cdd0;"></body>
   <head>
-    <meta name="viewport" content="width=512, initial-scale=1">
+    <meta name="viewport" content="width=512, initial-scale=1.0, maximum-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
       integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -21,12 +29,14 @@
         -ms-user-select: none; /* IE 10 and IE 11 */
         user-select: none; /* Standard syntax */
 
-        font-family: sans-serif;
+        font-family: 'Open Sans';
         position: absolute;
         width: 100%;
         height: 100%;
         padding: 0;
         margin: 0;
+
+        color: #2e1718;
       }
 
       #wrapper {
@@ -68,18 +78,25 @@
         line-height: 32px;
         cursor: default;
         background-color: #f7cdd0;
+        color: #7f865c;
         text-align: center;
 
         font-size: 14px;
+        font-weight: 500;
+      }
+
+      .word.found {
+        color: #f7cdd0;
       }
 
       .found {
         /* background-color: #a0eca0; */
-        background-color: #9ea56d;  /* da verificare, un po' più chiaro di quello del pdf */
+        background-color: #7f865c;  /* da verificare, un po' più chiaro di quello del pdf */
       }
 
       .dragged {
-        background-color: #fffd91;
+        background-color: #babc98;
+        color: #2e1718;
       }
     </style>
   </head>
