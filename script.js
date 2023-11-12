@@ -8,7 +8,7 @@ const grid =
     'AABIHSUILLENIRAM' +
     'RETTOPYRRAHTEiAd' +
     'IuNIPOTIIeADETRR' + 
-    'ONBgiLNIugONEEEB' +
+    'ONBgiLNugMONEEEB' +
     'KHAISISSAOIMZLnA' +
     'ACNTBTodGDALOuMB' + 
     'RAGMAEeBUTASOmEY' +
