@@ -29,6 +29,10 @@ const words_1 = [
   'UDINE',       'VALZER'
 ];
 
+// const words_1 = ['AIDA'];
+
+const answer = 'ventiduegiugnoduemilaventiquattro';
+
 // State. //////////////////////////////////////////////////////////////////////
 
 // Toggle "dragging" mode. Dragging mode is initiated by clicking (tapping?) on
@@ -51,6 +55,8 @@ let found_words = Array(words_1.length);
 found_words.fill(false);
 
 let n_found = 0;
+
+let answer_positions = [];
 
 // Initialization. /////////////////////////////////////////////////////////////
 
@@ -81,6 +87,8 @@ let setup = function() {
       letter_span.row = i;
       letter_span.col = j;
 
+      $(letter_span).css({top: 32 * i, left: 32 * j, position: 'fixed'});
+
       if (idx < grid.length) {
         letter_span.textContent = grid.charAt(idx);
       } else {
@@ -98,7 +106,41 @@ let setup = function() {
     grid_wrapper.appendChild(br);
   }
 
+  // Generate the list of words.
+  template_word.remove();
+  for (let i = 0; i < words_1.length; ++i) {
+    const word = words_1[i];
+
+    let word_span = template_word.cloneNode();
+
+    word_span.id = 'word-' + i;
+    word_span.textContent = word;
+
+    if (found_words[i]) word_span.className += ' found';
+
+    word_list_1.appendChild(word_span);
+  }
+
+  // Generate the answer.
+  let answer_wrapper = document.getElementById('answer');
+  for (let i = 0; i < answer.length; ++i) {
+    let letter_span = template_letter.cloneNode();
+
+    letter_span.id = 'answer-' + i;
+    letter_span.textContent = answer.charAt(i);
+
+    let child = answer_wrapper.appendChild(letter_span);
+
+    let pos = child.getBoundingClientRect();
+    answer_positions.push({top: pos.top, left: pos.left});
+
+    if (i == 7 || i == 13 || i == 20)
+      answer_wrapper.appendChild(document.createElement('br'));
+  }
+
   let handler_down = function(e) {
+    if (n_found >= words_1.length) return;
+
     let el = document.elementFromPoint(e.pageX, e.pageY);
     if (!el || el.id.substring(0, 6) != 'letter') return;
 
@@ -214,7 +256,7 @@ let setup = function() {
     }
 
     if (n_found == words_1.length) {
-      $('.found').addClass('faded');
+      win();
     }
   };
 
@@ -222,18 +264,45 @@ let setup = function() {
   window.addEventListener('pointermove', handler_move);
   window.addEventListener('pointerup', handler_up);
 
-  // Generate the list of words.
-  template_word.remove();
-  for (let i = 0; i < words_1.length; ++i) {
-    const word = words_1[i];
+  $('#playagain').on('click', function() {
+    reset();
+    location.reload();
+  });
 
-    let word_span = template_word.cloneNode();
-
-    word_span.id = 'word-' + i;
-    word_span.textContent = word;
-
-    if (found_words[i]) word_span.className += ' found';
-
-    word_list_1.appendChild(word_span);
-  }
+  if (n_found == words_1.length) win();
 };
+
+let win =
+    function() {
+  $('.found').addClass('faded');
+
+  setTimeout(function() {
+    $('#grid-wrapper .letter:not(.found)').each(function(i) {
+      if (i < answer_positions.length)
+        $(this).css($('#answer-' + i).position());
+    });
+
+    $('.found').fadeOut();
+    $('#playagain').fadeIn();
+  }, 1500);
+}
+
+let reset = function() {
+  $('.found').removeClass('found');
+
+  found_grid_letters = Array(grid_height);
+  for (let i = 0; i < found_grid_letters.length; ++i) {
+    found_grid_letters[i] = Array(grid_width);
+    found_grid_letters[i].fill(false);
+  }
+
+  found_words = Array(words_1.length);
+  found_words.fill(false);
+
+  n_found = 0;
+
+  // We also update the local storage.
+  localStorage.found_words = JSON.stringify(found_words);
+  localStorage.n_found = n_found;
+  localStorage.found_grid_letters = JSON.stringify(found_grid_letters);
+}

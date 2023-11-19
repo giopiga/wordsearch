@@ -49,12 +49,25 @@
         height: 768px;
       }
 
+      #answer {
+        position: absolute;
+        top: 176px;
+
+        text-align: center;
+        width: 100%;
+
+        z-index: -10;
+      }
+
       #grid-wrapper {
-        position: relative;
+        background-color: #f7cdd0;
+        width: 100%;
+        height: 480px;
       }
 
       #word-list {
-        margin-top: 32px;
+        position: absolute;
+        top: 512px;
       }
 
       .letter {
@@ -69,6 +82,7 @@
 
         touch-action: none;
         font-size: 24px;
+        transition: color 0.25s, background-color 0.25s, top 2s, left 2s;
       }
 
       .word {
@@ -102,7 +116,32 @@
       .faded {
         background-color: #f7cdd0;
         color: #bcabac;
-        transition: color 1s, background-color 1s;
+        transition: color 1s, background-color 1s, position 2s;
+      }
+
+      .hidden {
+        background-color: #f7cdd0;
+        color: #f7cdd0;
+      }
+
+      #playagain {
+        display: inline-block;
+        color: #2e1718;
+        background-color: #f7cdd0;
+        cursor: pointer;
+        padding: 5px;
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        display: none;
+      }
+
+      #playagain:hover {
+        background-color: #7f865c;
+        color: #f7cdd0;
       }
     </style>
   </head>
@@ -116,6 +155,10 @@
       <div id="word-list">
         <span class="word" id="template-word">WORD</span>
       </div>
+
+      <div id="answer"></div>
+
+      <div id="playagain">gioca di nuovo</div>
     </div>
   </body>
 </html>
