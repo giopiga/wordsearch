@@ -29,8 +29,6 @@ const words_1 = [
   'UDINE',       'VALZER'
 ];
 
-// const words_1 = ['AIDA'];
-
 const answer = 'ventiduegiugnoduemilaventiquattro';
 
 // State. //////////////////////////////////////////////////////////////////////
@@ -90,7 +88,7 @@ let setup = function() {
       $(letter_span).css({top: 32 * i, left: 32 * j, position: 'fixed'});
 
       if (idx < grid.length) {
-        letter_span.textContent = grid.charAt(idx);
+        letter_span.textContent = grid.charAt(idx).toUpperCase();
       } else {
         let last_letter_symbol = document.createElement('i');
         last_letter_symbol.className = 'fa-solid fa-infinity';
@@ -283,7 +281,10 @@ let win =
     });
 
     $('.found').fadeOut();
-    $('#playagain').fadeIn();
+
+    setTimeout(function() {
+      $('#playagain').fadeIn();
+      $('#logo').fadeIn();}, 1000);
   }, 1500);
 }
 
