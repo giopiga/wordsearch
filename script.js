@@ -224,9 +224,11 @@ let setup = function() {
 
     for (let i = 0; i < words_1.length; ++i) {
       if (word == words_1[i]) {
+        // Update n_found when a new word is found
+        if (!found_words[i]) ++n_found;
+
         found_words[i] = true;
         found_word_idx = i;
-        ++n_found;
 
         break;
       }
